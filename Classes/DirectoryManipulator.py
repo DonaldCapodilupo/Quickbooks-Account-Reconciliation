@@ -23,7 +23,7 @@ class DirectoryManipulator:
         import pandas as pd
         import os
         # Code will go here to change the directory to the downloads folder.
-        os.chdir(self.directory)
+        os.chdir(mainDirectory)
         data_xls = pd.read_excel(self.fileName, 'General Ledger',
                                  index_col=None)  # THIS CODE CONVERTS THE EXCEL DOWNLOAD TO A CSV
         os.chdir(mainDirectory)
@@ -52,9 +52,6 @@ class DirectoryManipulator:
 
 
 
-
-cat = DirectoryManipulator("/home/doncapodilupo/Downloads")
-cat.checkDownload()
 
 
 

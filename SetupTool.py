@@ -49,4 +49,3 @@ def directorySetup():  # This will ensure that all required files and directorie
     print("All directories are present.\n")
 
 
-directorySetup()

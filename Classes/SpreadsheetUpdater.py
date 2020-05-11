@@ -34,7 +34,7 @@ class SpreadsheetUpdater:
             if reconNumber in dictionaryList:
                 self.easyUpdate(recon)
                 dictionaryList.remove(reconNumber)
-            if reconNumber not in dictionaryList:
+            else:
                 accountsToUpdateSeparately["Accounts that have no recons"].append(recon)
         for i in dictionaryList:
             accountsToUpdateSeparately["Accounts that haven't had activity"].append(i)

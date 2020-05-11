@@ -45,8 +45,7 @@ class DirectoryManipulator:
         accountsThatNeedToBeReconned = []
         for recon in accountstobereconcilled:
             accountsThatNeedToBeReconned.append(
-                recon[
-                10:19])  # Removes excess information. I need to compare two lists in the format of "Total for xxxxxx"
+                recon[10:19])
         return accountsThatNeedToBeReconned  # List of accounts that need to be reconciled.
 
 

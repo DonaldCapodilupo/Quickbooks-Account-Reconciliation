@@ -21,5 +21,5 @@ if __name__ == "__main__":
     confirmDownload = DirectoryManipulator("/home/doncapodilupo/Downloads")
     confirmDownload.checkDownload()
     accountAndBalanceDict = IndexMatch(bizName).getValues()
-    
+    print(accountAndBalanceDict)
 

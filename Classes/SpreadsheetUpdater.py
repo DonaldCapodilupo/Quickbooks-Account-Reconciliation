@@ -40,19 +40,4 @@ class SpreadsheetUpdater:
             accountsToUpdateSeparately["Accounts that haven't had activity"].append(i)
 
 
-        print(accountsToUpdateSeparately)
 
-
-
-
-
-
-
-
-
-businessName = "Future Reach Marketing LLC"
-bizName = ((businessName.replace(" ","+"))+"_General+Ledger.xlsx")
-from Classes.IndexMatch import IndexMatch
-cat = SpreadsheetUpdater("/home/doncapodilupo/Documents/Snapshot Financials/Recons",IndexMatch(bizName).getValues(),
-                         bizName)
-cat.getAccountsThatCanBeUpdatedEasily()

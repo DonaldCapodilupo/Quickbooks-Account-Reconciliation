@@ -8,12 +8,17 @@ class SpreadsheetDesigner:
     def moveAndCopyWorksheet(self):
 
         from openpyxl import load_workbook
-        wb = load_workbook(self.workbook)
-        previousSheet = wb.active
-        newSheet = wb.copy_worksheet(previousSheet)
-        newSheet.title = self.tabName
+        from openpyxl.utils.exceptions import InvalidFileException
+        try:
+            wb = load_workbook(self.workbook)
+            currentSheet = wb.active
+            previousSheet = currentSheet
+            newSheet = wb.copy_worksheet(previousSheet)
+            newSheet.title = self.tabName
+            wb.save(self.workbook)
+        except InvalidFileException:
+            print("Not an excel file extension - "+ self.workbook)
 
-        wb.save(self.workbook)
 
     def insertNewAccountBalances(self, accountBalance):
         from openpyxl import load_workbook
@@ -22,15 +27,3 @@ class SpreadsheetDesigner:
         ws["J4"] = accountBalance
         wb.save(self.workbook)
 
-
-
-import os
-os.chdir("/home/doncapodilupo/Documents/Snapshot Financials/Recons")
-
-
-recons = ["100500 - Business Fundamentals Chk.xlsx",
-          "110000 - Accounts Receivable.xlsx"]
-for recon in recons:
-    cat = SpreadsheetDesigner(recon,"051120")
-    cat.moveAndCopyWorksheet()
-    cat.insertNewAccountBalances("25.64")

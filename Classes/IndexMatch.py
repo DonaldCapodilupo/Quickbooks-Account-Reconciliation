@@ -1,7 +1,3 @@
-businessName = "Future Reach Marketing LLC"
-bizName = ((businessName.replace(" ","+"))+"_General+Ledger.xlsx")
-
-
 class IndexMatch:
     def __init__(self, workbook):
         self.workbook = workbook

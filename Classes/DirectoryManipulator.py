@@ -1,8 +1,7 @@
-businessName = "Future Reach Marketing LLC"
-
 class DirectoryManipulator:
-    def __init__(self,directory):
+    def __init__(self,directory, businessName):
         self.directory = directory
+        self.businessName = businessName
         self.fileName = ((businessName.replace(" ","+"))+"_General+Ledger.xlsx")
 
     def checkDownload(self):

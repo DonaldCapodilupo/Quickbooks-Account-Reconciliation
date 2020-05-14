@@ -1,19 +1,17 @@
-
+import os
 class SpreadsheetCreator:
-    def __init__(self, workbook, reconType, tabName):
+    def __init__(self, workbook, tabName, directory):
         self.workbook = workbook
-        self.reconType = reconType
         self.tabName = tabName
+        self.directory = directory
 
-        if tabName == 'Single Recon':
-            self.singleAccountReconcilliationformat()
-        else:
-            self.doubleAccountReconcilliationformat()
+        os.chdir(self.directory)
 
     def doubleAccountReconcilliationformat(self):
         from openpyxl import Workbook
         from openpyxl.styles import Font, Alignment
         import datetime
+        os.chdir(self.directory)
         wb = Workbook()
         wb.create_sheet(self.tabName)
         #wb.remove("Sheet")
@@ -52,15 +50,20 @@ class SpreadsheetCreator:
         sheet['J16'] = '=sum(J8:J14)'
         sheet['H18'] = 'VARIANCE'
         sheet['J18'] = '=E16-J16'
-        wb.save(self.workbook)
+        workbookName = str(self.workbook).replace("/", "")
+        workbookName.strip("/")
+        os.chdir(self.directory)
+        print(self.directory)
+        wb.save(self.directory+"/"+workbookName)
 
     def singleAccountReconcilliationformat(self):
        from openpyxl import Workbook
        from openpyxl.styles import Font, Alignment
        import datetime
+       os.chdir(self.directory)
        wb = Workbook()
        wb.create_sheet(self.tabName)
-       wb.remove("Sheet1")
+       #wb.remove("Sheet")
        sheet = wb.active
        # Merge the cells
        sheet.merge_cells("A1:L1")
@@ -102,4 +105,8 @@ class SpreadsheetCreator:
        sheet['I7'] = 'Amount'
        sheet['H19'] = 'Variance'
        sheet['I19'] = '=I5-SUM(I9:J16)'
-       wb.save(self.workbook)
+       workbookName = str(self.workbook).replace("/", "")
+
+       os.chdir(self.directory)
+       print(self.directory)
+       wb.save(self.directory + "/" + workbookName)

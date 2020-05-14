@@ -13,7 +13,7 @@ class IndexMatch:
 
         #Get a dict that follows this format: {"Total For ...":THE CORRECT ADJACENT CELL}
         for cell in total_for_range:
-            cellString = str(cell.value).lstrip(" ")[0:16]
+            cellString = str(cell.value).lstrip(" ")+".xlsx"
             if "Total for" in cellString:
                 self.valuesDict[cellString] = "J"+str(cell.row-1)
 

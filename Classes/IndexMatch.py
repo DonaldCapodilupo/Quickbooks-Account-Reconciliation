@@ -14,8 +14,9 @@ class IndexMatch:
         #Get a dict that follows this format: {"Total For ...":THE CORRECT ADJACENT CELL}
         for cell in total_for_range:
             cellString = str(cell.value).lstrip(" ")+".xlsx"
-            if "Total for" in cellString:
-                self.valuesDict[cellString] = "J"+str(cell.row-1)
+            correctFormat = cellString.replace("/","") #Throws error if file name has something like "(A/R)" in it
+            if "Total for" in correctFormat:
+                self.valuesDict[correctFormat] = "J"+str(cell.row-1)
 
         # Get a dict that follows this format: {"Total For ...":"$125.63"}
         for key, correctCell in self.valuesDict.items():

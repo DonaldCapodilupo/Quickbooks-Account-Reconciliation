@@ -14,7 +14,7 @@ class SpreadsheetCreator:
         os.chdir(self.directory)
         wb = Workbook()
         wb.create_sheet(self.tabName)
-        #wb.remove("Sheet")
+        wb.remove_sheet(wb.get_sheet_by_name("Sheet"))
         sheet = wb.active
         #Merge the cells
         sheet.merge_cells("A1:J1")
@@ -33,7 +33,6 @@ class SpreadsheetCreator:
         sheet['A4'] = 'Business Fundamentals Chk - 9387'
         sheet['E4'] = 'AccountBalanceVariable'
         sheet['F4'] = 'Quickbooks Account Balance - 100500'
-        sheet['J4'] = ' '
         sheet['A6'] = 'DATE'
         sheet['B6'] = 'ADJUSTMENTS:'
         sheet['C6'] = 'CLEAR DATE'
@@ -63,7 +62,7 @@ class SpreadsheetCreator:
        os.chdir(self.directory)
        wb = Workbook()
        wb.create_sheet(self.tabName)
-       #wb.remove("Sheet")
+       wb.remove_sheet(wb.get_sheet_by_name("Sheet"))
        sheet = wb.active
        # Merge the cells
        sheet.merge_cells("A1:L1")
@@ -99,7 +98,6 @@ class SpreadsheetCreator:
        sheet['A1'] = str(self.workbook)
        sheet['A2'] = datetime.date.today()
        sheet['A5'] = 'GL Balance:'
-       sheet['I5'] = 'AccountBalanceVariable'
        sheet['A7'] = 'Date:'
        sheet['B7'] = 'Description'
        sheet['I7'] = 'Amount'

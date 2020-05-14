@@ -1,8 +1,9 @@
 
 class SpreadsheetDesigner:
-    def __init__(self, workbook, tabName):
+    def __init__(self, workbook, tabName, directory):
         self.workbook = workbook
         self.tabName = tabName
+        self.directory = directory
 
 
     def moveAndCopyWorksheet(self):
@@ -10,7 +11,7 @@ class SpreadsheetDesigner:
         from openpyxl import load_workbook
         from openpyxl.utils.exceptions import InvalidFileException
         try:
-            wb = load_workbook(self.workbook)
+            wb = load_workbook(self.directory+"/"+self.workbook)
             currentSheet = wb.active
             previousSheet = currentSheet
             newSheet = wb.copy_worksheet(previousSheet)
@@ -22,8 +23,8 @@ class SpreadsheetDesigner:
 
     def insertNewAccountBalances(self, accountBalance):
         from openpyxl import load_workbook
-        wb = load_workbook(self.workbook)
-        ws = wb.active
+        wb = load_workbook(self.directory+"/"+self.workbook)
+        ws = wb[self.tabName]
         ws["J4"] = accountBalance
         wb.save(self.workbook)
 

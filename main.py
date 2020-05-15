@@ -15,7 +15,7 @@ def getTabName():
     return monthlyFolderTitle
 
 if __name__ == "__main__":
-    print("Hello and welcome to the accounting reconciliation software V0.03")
+    print("Hello and welcome to the accounting reconciliation software V1.00")
     print("Created by Donald Capodilupo")
     from Classes.DirectoryManipulator import DirectoryManipulator
     from Classes.IndexMatch import IndexMatch
@@ -26,11 +26,22 @@ if __name__ == "__main__":
     confirmDownload = DirectoryManipulator("/home/doncapodilupo/Downloads", businessName).checkDownload()
     accountAndBalanceDict = IndexMatch(((businessName.replace(" ","+"))+"_General+Ledger.xlsx")).getValues()
     os.chdir(monthlyFolderDirectory)
-    keyErrors = []
+
+    from Classes.ListDisplay import ListDisplay
+
+    tabDecisions = [getTabName(),"Custom Tab Name"]
+
+    tabName = ListDisplay(tabDecisions)
+    tabName.displayList(False)
+    if tabName == getTabName():
+        pass
+    else:
+        print("What would you like the tab name to be?")
+        tabName = input(">")
 
     for recon in os.listdir(monthlyFolderDirectory):
         try:
-            newSheet = SpreadsheetDesigner(recon, getTabName(),monthlyFolderDirectory)
+            newSheet = SpreadsheetDesigner(recon, tabName,monthlyFolderDirectory)
             newSheet.moveAndCopyWorksheet()
             try:
                 newSheet.insertNewAccountBalances(accountAndBalanceDict[recon])
@@ -43,10 +54,9 @@ if __name__ == "__main__":
             print("Error - " +recon + " will need to be created")
 
     from Classes.SpreadsheetCreator import SpreadsheetCreator
-    from Classes.ListDisplay import ListDisplay
+
 
     for workbook in accountAndBalanceDict.keys():
-        #os.chdir(ROOT+"/Recons/"+getMonthlyFolderTitle())
         workbook = str(workbook).replace("/","")
         print("There is not a workbook for "+workbook+" created in the directory.")
         print("Creating workbook af file location: "+str(ROOT)+"/Recons/"+getMonthlyFolderTitle())
@@ -56,15 +66,14 @@ if __name__ == "__main__":
         reconChoice = single_Or_Double_Recon.displayList(False)
 
         if reconChoice == 'Single Recon':
-           newSingleReconWorkbook = SpreadsheetCreator(workbook, getTabName(), monthlyFolderDirectory)
+           newSingleReconWorkbook = SpreadsheetCreator(workbook, tabName, monthlyFolderDirectory)
            newSingleReconWorkbook.singleAccountReconcilliationformat()
-           newSheet = SpreadsheetDesigner(workbook, getTabName(), monthlyFolderDirectory)
+           newSheet = SpreadsheetDesigner(workbook, tabName, monthlyFolderDirectory)
            newSheet.insertNewAccountBalances(accountAndBalanceDict[workbook])
         else:
-            newSingleReconWorkbook = SpreadsheetCreator(workbook, getTabName(), monthlyFolderDirectory)
-            #os.chdir(ROOT + "/Recons/" + getMonthlyFolderTitle())
+            newSingleReconWorkbook = SpreadsheetCreator(workbook, tabName, monthlyFolderDirectory)
             newSingleReconWorkbook.doubleAccountReconcilliationformat()
-            newSheet = SpreadsheetDesigner(workbook, getTabName(), monthlyFolderDirectory)
+            newSheet = SpreadsheetDesigner(workbook, tabName, monthlyFolderDirectory)
             newSheet.insertNewAccountBalances(accountAndBalanceDict[workbook])
 
 

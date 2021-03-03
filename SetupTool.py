@@ -29,23 +29,18 @@ def getMonthlyFolderTitle():
 
 def directorySetup():  # This will ensure that all required files and directories are present before continuing.
     import os
-    print("Initializing setup.\n")
-    # Create directories
     neededDirectories = ['Recons']
-    for i in neededDirectories:
+    for directory in neededDirectories:
         try:
-            # Create target Directory
-            print(os.getcwd())
-            os.mkdir(i)
-            print("Directory " + i + " Created ")
+            os.mkdir(directory)
         except FileExistsError:
-            print("Directory " + i + " already exists")
-        os.chdir(i)
+            pass
+        os.chdir(directory)
+
+        #Make a folder for the current month if one is not created.
         try:
             os.mkdir(getMonthlyFolderTitle())
-            print("The monthly folder "+getMonthlyFolderTitle()+ " has been created.")
         except FileExistsError:
-            print("The monthly folder " + getMonthlyFolderTitle() + " already exists.")
-    print("All directories are present.\n")
+            pass
 
 

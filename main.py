@@ -23,7 +23,7 @@ if __name__ == "__main__":
     from Classes.SpreadsheetCreator import SpreadsheetCreator
     from SetupTool import *
     directorySetup()
-    confirmDownload = DirectoryManipulator("/home/doncapodilupo/Downloads", businessName).checkDownload()
+    confirmDownload = DirectoryManipulator("C:\\Users\Don\Downloads", businessName).checkDownload()
     accountAndBalanceDict = IndexMatch(((businessName.replace(" ","+"))+"_General+Ledger.xlsx")).getValues()
     os.chdir(monthlyFolderDirectory)
 
@@ -80,11 +80,6 @@ if __name__ == "__main__":
 
 
 
-
-
-
-
-    #    if accountNumber in
 
 
 

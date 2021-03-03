@@ -7,7 +7,7 @@ class IndexMatch:
         #Open spreadsheet.
         from openpyxl import load_workbook
         import os
-        os.chdir("/home/doncapodilupo/Downloads")
+        os.chdir("C:\\Users\Don\Downloads")
         wb = load_workbook(filename=self.workbook).active
         total_for_range = wb['A']
 

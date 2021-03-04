@@ -3,67 +3,30 @@ import tkinter as tk
 # custom classes made to create good looking buttons and entries
 from class_buttons import Button
 from class_entry import Entry
+from tkinter.filedialog import askopenfile
+import SetupTool
+import os
+from os import path
+ROOT = path.dirname(path.realpath(__file__))
+SetupTool.directorySetup()
+os.chdir(ROOT)
 
 
-
-
-root = tk.Tk()
-
-canvas = tk.Canvas(root, width=600, height=300)
-canvas.grid(columnspan=3, rowspan=3)
-
-root.iconbitmap("favicon.ico")
-root.wm_title("Snapshot Financials: Account Reconciliation Software")
-
-#Logo
-#logo = Image.open('Logo.png')
-#logo = ImageTk.PhotoImage(logo)
-#logo_label = tk.Label(image=logo)
-#logo_label.image = logo
-#logo_label.grid(column=1,row=0)
-
-
-#Main window text
-instructions = tk.Label(root, text="Let's begin to reconcile your accounts.")
-instructions.grid(columnspan=3, column=0, row=1)
-
-#Get download file location text
-downloadedFile = tk.StringVar()
-downloadedFileName = tk.Label(root, textvariable=downloadedFile)
-downloadedFile.set("This is where the file name will appear.")
-downloadedFileName.grid(column=2, row=2)
-
-
-
-
-def getDownloadedSpreadsheet():
-    get_download_button_text.set("Loading...")
-    spreadsheet_file = askopenfile(parent=root,mode='rb',title="Choose a file",filetype=[("XLSX file","*.xlsx",)])
-    if spreadsheet_file:
-        downloadedFile.set(spreadsheet_file.name)
-        get_download_button_text.set("Select a different file.")
-
-    else:
-        get_download_button_text.set("Select the correct Spreadsheet!")
-
-
-def backendLogic():
-    pass
-
-
-
+# this is the class called when the program starts
+# it inherits a tkinter window
 class Main(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         # basic config
         # tk.Tk.wm_geometry(self, '1280x720')
-        tk.Tk.wm_resizable(self, False, False)
+        tk.Tk.wm_resizable(self, True, True)
         tk.Tk.wm_title(self, 'Online Giveaway Solutions')
         tk.Tk.config(self, bg='#333333')  # hex color #333333 is dark gray
         # create variable
         self.current_frame = None
         # set home frame
         self.switch_frame(MainMenu)
+
 
     # this function switches the current frame for the frame entered
     def switch_frame(self, frame):
@@ -80,67 +43,92 @@ class MainMenu(tk.Frame):
         tk.Frame.__init__(self, master)
         tk.Frame.config(self, bg='#333333')
 
-        tk.Label(self, text='Instagram Contest Solution', font=('Arial', 25, 'bold'), bg='#333333', fg='#ffffff').pack(pady=30)
-        tk.Label(self, bg='#333333').pack(pady=25)  # spacing
+        lbl_Company_Name = tk.Label(self, text='Account Reconciliation Software', font=('Arial', 25, 'bold'), bg='#333333', fg='#ffffff')
+        lbl_Company_Name.grid(row=0,column=2)
+
+        tk.Label(self, bg='#333333', fg='#ffffff').grid(row=1,column=1,pady=50)
 
         # using custom buttons for the ui
-        Button(root=self, text='Start', command=lambda x: master.switch_frame(SelectMode)).pack(pady=15)
-        Button(root=self, text='Help', command=lambda x: print('DO HELP')).pack(pady=15)
-        Button(root=self, text='Exit', command=lambda x: master.destroy()).pack(pady=15)
+        btn_Start_Program = Button(root=self, text='Begin Reconciliation', command=lambda x: master.switch_frame(ReconWindow))
+        btn_Start_Program.grid(row=2,column=2)
 
 
-class SelectMode(tk.Frame):
+        btn_Exit_App = Button(root=self, text='Exit', command=lambda x: master.destroy())
+        btn_Exit_App.grid(row=10,column=2)
+
+
+class ReconWindow(tk.Frame):
+    def __init__(self, master):
+        import os
+        tk.Frame.__init__(self, master)
+        tk.Frame.config(self, bg='#333333')
+        tk.Label(self, bg='#333333').grid(row=0,column=1)  # spacing
+
+        btn_Select_File = Button(root=self, text='Select A File',
+                             command=lambda x: getDownloadedFile())
+        btn_Select_File.grid(row=1, column=0)
+
+
+        lbl_File_Name = tk.Label(self, text='FILE NAME WILL APPEAR HERE')
+        lbl_File_Name.grid(row=1, column=1)
+
+
+        btn_Confirm = Button(root=self, text='Begin Reconciliation',
+            command=lambda x: confirmButton())
+        btn_Confirm.grid(row=2, column=1)
+
+
+
+        def getDownloadedFile():
+            user_File = askopenfile(parent=master, mode='rb', title="Choose a file", filetype=[("XLSX file", "*.xlsx",)]).name
+            lbl_File_Name.config(text=user_File)
+
+        def confirmButton():
+            from BackEndLogic import accountsInGeneralLedger, accountsInDirectory
+
+            accounts_In_GL = accountsInGeneralLedger(lbl_File_Name.cget("text")) #Dict {Account Name:$0.00}
+            accounts_In_Directory = accountsInDirectory() #List
+
+            results_text_box = tk.Text(self, height=30, width=100)
+
+            for key in accounts_In_GL.keys():
+                key = key+".xlsx"
+                if key in accounts_In_Directory:
+                    results_text_box.insert(1.0, key + " is in the directory. Updating...\n")
+                    results_text_box.tag_configure("center", justify="center")
+                    results_text_box.tag_add("center", 1.0, "end")
+                    results_text_box.grid(column=0, row=5, columnspan=5)
+                    from Classes.SpreadsheetDesigns import SpreadsheetDesigner
+                    from SetupTool import getMonthlyFolderTitle
+                    new_worksheet = SpreadsheetDesigner(key,getMonthlyFolderTitle(),"Recons/"+getMonthlyFolderTitle())
+                    new_worksheet.moveAndCopyWorksheet()
+                    new_worksheet.insertNewAccountBalances(accounts_In_GL[key[:-5]])
+
+                else:
+                    results_text_box.insert(1.0, key + " is not in the directory and needs to be created.\n")
+                    results_text_box.tag_configure("center", justify="center")
+                    results_text_box.tag_add("center", 1.0, "end")
+                    results_text_box.grid(column=0, row=5, columnspan=5)
+
+
+
+class AddRecon(tk.Frame):
     def __init__(self, master):
         tk.Frame.__init__(self, master)
         tk.Frame.config(self, bg='#333333')
 
-        tk.Label(self, text='Select mode', font=('Arial', 25, 'bold'), bg='#333333', fg='#ffffff').pack(pady=30)
-        tk.Label(self, bg='#333333').pack(pady=25)  # spacing
+        lbl_Company_Name = tk.Label(self, text='Account Reconciliation Software', font=('Arial', 25, 'bold'), bg='#333333', fg='#ffffff')
+        lbl_Company_Name.grid(row=0,column=2)
+
+        tk.Label(self, bg='#333333', fg='#ffffff').grid(row=1,column=1,pady=50)
 
         # using custom buttons for the ui
-        Button(root=self, text='Fully Random', command=lambda x: master.switch_frame(FullyRandom)).pack(pady=15)
-        Button(root=self, text='Easy to Remember', command=lambda x: master.switch_frame(EasyToRemember)).pack(pady=15)
+        btn_Start_Program = Button(root=self, text='Begin Reconciliation', command=lambda x: master.switch_frame(ReconWindow))
+        btn_Start_Program.grid(row=2,column=2)
 
 
-class EasyToRemember(tk.Frame):
-    def __init__(self, master):
-        tk.Frame.__init__(self, master)
-        tk.Frame.config(self, bg='#333333')
-
-        tk.Label(self, text='Fully Random Password', font=('Arial', 25, 'bold'), bg='#333333', fg='#ffffff').pack(
-            pady=30)
-        tk.Label(self, bg='#333333').pack(pady=25)  # spacing
-
-        self.entry_length = Entry(self, alt_text='Enter password length')
-        self.entry_length.pack(pady=10)
-
-        self.entry_name = Entry(self, alt_text='Enter your name')
-        self.entry_name.pack(pady=10)
-
-        self.entry_year = Entry(self, alt_text='Enter your birth year')
-        self.entry_year.pack(pady=10)
-
-        Button(root=self, text='Confirm',
-               command=lambda x: self.generate_password(int(self.entry_length.get()), self.entry_name.get(),
-                                                        self.entry_year.get())).pack(pady=15)
-
-        self.entry_password = Entry(self, alt_text='')
-        self.entry_password.pack(pady=15)
-
-        Button(root=self, text='Copy', command=lambda x: ("")).pack(pady=15)
-
-    def generate_password(self, length, user_name, birth_year):
-        appropriate_characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%"
-
-
-        self.entry_password.delete(0, tk.END)
-        self.entry_password.insert(tk.END, "")
-
-
-class FullyRandom(tk.Frame):
-    def __init__(self, master):
-        tk.Frame.__init__(self, master)
-        tk.Frame.config(self, bg='#333333')
+        btn_Exit_App = Button(root=self, text='Exit', command=lambda x: master.destroy())
+        btn_Exit_App.grid(row=10,column=2)
 
 
 if __name__ == '__main__':

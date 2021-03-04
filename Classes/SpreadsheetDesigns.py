@@ -12,13 +12,16 @@ class SpreadsheetDesigner:
         from openpyxl.utils.exceptions import InvalidFileException
         try:
             wb = load_workbook(self.directory+"/"+self.workbook)
-            currentSheet = wb.active
-            previousSheet = currentSheet
-            newSheet = wb.copy_worksheet(previousSheet)
-            newSheet.title = self.tabName
+            previous_worksheet = wb.worksheets[0]
+            new_worksheet = wb.create_sheet(self.tabName)
+            for row in previous_worksheet:
+                for cell in row:
+                    new_worksheet[cell.coordinate].value = cell.value
+
             wb.save(self.workbook)
         except InvalidFileException:
             print("Not an excel file extension - "+ self.workbook)
+
 
 
     def insertNewAccountBalances(self, accountBalance):

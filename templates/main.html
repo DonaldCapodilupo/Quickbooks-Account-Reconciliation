@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Snapshot Financials</title>
+
+    <link rel="stylesheet" href="../static/main.css">
+
+</head>
+<body>
+
+<div class="MainWrapper">
+    <div class="MainTitle">
+        <h1>Snapshot Financials</h1>
+        <h2>Account Reconciliation Software</h2>
+    </div>
+    <div class="WelcomeText">
+        <p>Please select which option you would like</p>
+    </div>
+    <div class="Button_Wrapper">
+        <form action="{{ url_for('main_Menu') }}" method="POST">
+            <div class="Button_Wrapper">
+                <input type="submit" name="btn_Confirm" value="Go To Recon Page">
+            </div>
+        </form>
+        <button type="button" onclick="window.close()">Close Tab</button>
+    </div>
+
+</div>
+</body>
+</html>
+
+

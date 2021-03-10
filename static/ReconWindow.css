@@ -1,0 +1,12 @@
+body{
+    background-color: lightskyblue;
+
+}
+
+.Main_Wrapper{
+    background-color: red;
+    display:grid;
+    grid-template-rows: auto auto auto;
+    text-align: center;
+
+}

@@ -5,13 +5,14 @@ class SpreadsheetCreator:
         self.tabName = tabName
         self.directory = directory
 
-        os.chdir(self.directory)
+
 
     def doubleAccountReconcilliationformat(self):
         from openpyxl import Workbook
         from openpyxl.styles import Font, Alignment
         import datetime
-        os.chdir(self.directory)
+        #print(os.getcwd())
+        #os.chdir(self.directory)
         wb = Workbook()
         wb.create_sheet(self.tabName)
         wb.remove_sheet(wb.get_sheet_by_name("Sheet"))
@@ -51,9 +52,9 @@ class SpreadsheetCreator:
         sheet['J18'] = '=E16-J16'
         workbookName = str(self.workbook).replace("/", "")
         workbookName.strip("/")
-        os.chdir(self.directory)
-        print(self.directory)
-        wb.save(self.directory+"/"+workbookName)
+        #os.chdir(self.directory)
+        #print(self.directory)
+        wb.save(self.workbook)
 
     def singleAccountReconcilliationformat(self):
        from openpyxl import Workbook

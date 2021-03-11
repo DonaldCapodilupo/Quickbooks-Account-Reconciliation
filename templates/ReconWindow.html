@@ -22,9 +22,20 @@
         </form>
         </div>
 
-        <div class="Results_Wrapper">
-
-        </div>
+        <table>
+            <tr>
+                <th>Account Name</th>
+                <th>Account Balance</th>
+                <th>Recon Status</th>
+            </tr>
+            {% for account_Name in data %}
+            <tr>
+                <td>{{account_Name.account_Name}}</td>
+                <td>${{account_Name.account_Balance}}</td>
+                <td>{{account_Name.account_Status}}</td>
+            </tr>
+            {% endfor %}
+        </table>
 
     </div>
 </body>

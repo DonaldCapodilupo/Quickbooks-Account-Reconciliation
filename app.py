@@ -2,10 +2,15 @@ from flask import Flask, render_template, request,url_for,redirect
 from werkzeug.utils import secure_filename
 import os
 
+import SetupTool
+SetupTool.directorySetup()
+
+
 app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = 'Upload Folder'
 ALLOWED_EXTENSIONS = {'xlsx'}
+
 
 
 def allowed_file(filename):
@@ -34,7 +39,33 @@ def recon_Window():
         if uploaded_file.filename != '':
             filename = secure_filename(uploaded_file.filename)
             uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return redirect(url_for('main_Menu'))
+
+            from BackEndLogic import accountsInGeneralLedger, accountsInDirectory, Recon
+
+            accounts_In_GL = accountsInGeneralLedger(filename)
+            accounts_In_Directory = accountsInDirectory()
+
+            data =[]
+
+
+            for account in accounts_In_GL.keys():
+                if account+".xlsx" in accounts_In_Directory:
+                    data.append(Recon(account, accounts_In_GL[account], account + " has a recon and is being updated."))
+
+                elif account not in accounts_In_Directory:
+                    data.append(Recon(account, accounts_In_GL[account], account + " does not have a recon. Creating one..."))
+                else:
+                    data.append(Recon(account, accounts_In_GL[account], account + " broke the program. WTF Brah"))
+
+            return render_template('ReconWindow.html', data=data)
+                
+
+
+
+
+
+
+
 
     elif request.method == "GET":
         return render_template("ReconWindow.html")

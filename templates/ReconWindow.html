@@ -11,7 +11,7 @@
     <div class="Main_Wrapper">
 
         <div class="Main_Title_Wrapper">
-            <h1>>Select a Spreadsheet</h1>
+            <h1>Select a Spreadsheet</h1>
         </div>
 
         <div class="File_Upload_Wrapper">
@@ -32,7 +32,16 @@
             <tr>
                 <td>{{account_Name.account_Name}}</td>
                 <td>${{account_Name.account_Balance}}</td>
-                <td>{{account_Name.account_Status}}</td>
+
+
+                {% if account_Name.account_Status_Exists: %}
+                    <td>{{account_Name.account_Name}} Just Needs to be updated</td>
+                {% else %}
+                    <td>{{account_Name.account_Name}} Needs to be Created
+                        <input type="submit" name=Single_Recon value="Assign Single Reconciliation">
+                        <input type="submit" name=Double_Recon value="Assign Double Reconciliation"></td>
+                {% endif %}
+
             </tr>
             {% endfor %}
         </table>

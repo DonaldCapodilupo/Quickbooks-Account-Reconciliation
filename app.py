@@ -49,13 +49,14 @@ def recon_Window():
 
 
             for account in accounts_In_GL.keys():
-                if account+".xlsx" in accounts_In_Directory:
-                    data.append(Recon(account, accounts_In_GL[account], account + " has a recon and is being updated."))
+                temp_name = account+".xlsx"
+                if temp_name in accounts_In_Directory:
+                    data.append(Recon(account, accounts_In_GL[account], True))
 
                 elif account not in accounts_In_Directory:
-                    data.append(Recon(account, accounts_In_GL[account], account + " does not have a recon. Creating one..."))
+                    data.append(Recon(account, accounts_In_GL[account],False))
                 else:
-                    data.append(Recon(account, accounts_In_GL[account], account + " broke the program. WTF Brah"))
+                    data.append(Recon(account, accounts_In_GL[account], False))
 
             return render_template('ReconWindow.html', data=data)
                 

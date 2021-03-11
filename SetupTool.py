@@ -29,18 +29,21 @@ def getMonthlyFolderTitle():
 
 def directorySetup():  # This will ensure that all required files and directories are present before continuing.
     import os
-    neededDirectories = ['Recons']
+    ROOT = os.path.dirname(os.path.realpath(__file__))
+    neededDirectories = ['Recons', 'Upload Folder']
     for directory in neededDirectories:
         try:
             os.mkdir(directory)
         except FileExistsError:
             pass
-        os.chdir(directory)
 
-        #Make a folder for the current month if one is not created.
-        try:
-            os.mkdir(getMonthlyFolderTitle())
-        except FileExistsError:
-            pass
+        if directory == "Recons":
+            os.chdir('Recons')
+            #Make a folder for the current month if one is not created.
+            try:
+                os.mkdir(getMonthlyFolderTitle())
+            except FileExistsError:
+                pass
+        os.chdir(ROOT)
 
 

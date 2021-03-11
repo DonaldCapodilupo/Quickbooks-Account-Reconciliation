@@ -1,18 +1,27 @@
 import os
+
+def getTabName():
+    import datetime
+    current_time = datetime.datetime.now()
+    monthlyFolderTitle = current_time.strftime('%m%d%y')
+    return monthlyFolderTitle
+
+from SetupTool import getMonthlyFolderTitle
+
 class SpreadsheetCreator:
-    def __init__(self, workbook, tabName, directory):
+    def __init__(self, workbook):
         self.workbook = workbook
-        self.tabName = tabName
-        self.directory = directory
+        self.tabName = getTabName()
+        self.directory = "Recons/"+getMonthlyFolderTitle()
 
 
 
-    def doubleAccountReconcilliationformat(self):
+    def doubleAccountReconcilliationformat(self, account_Balance):
         from openpyxl import Workbook
         from openpyxl.styles import Font, Alignment
         import datetime
         #print(os.getcwd())
-        #os.chdir(self.directory)
+        os.chdir(self.directory)
         wb = Workbook()
         wb.create_sheet(self.tabName)
         wb.remove_sheet(wb.get_sheet_by_name("Sheet"))
@@ -50,13 +59,14 @@ class SpreadsheetCreator:
         sheet['J16'] = '=sum(J8:J14)'
         sheet['H18'] = 'VARIANCE'
         sheet['J18'] = '=E16-J16'
+        sheet['J4'] = account_Balance
         workbookName = str(self.workbook).replace("/", "")
         workbookName.strip("/")
         #os.chdir(self.directory)
         #print(self.directory)
         wb.save(self.workbook)
 
-    def singleAccountReconcilliationformat(self):
+    def singleAccountReconcilliationformat(self,account_Balance):
        from openpyxl import Workbook
        from openpyxl.styles import Font, Alignment
        import datetime
@@ -104,6 +114,7 @@ class SpreadsheetCreator:
        sheet['I7'] = 'Amount'
        sheet['H19'] = 'Variance'
        sheet['I19'] = '=I5-SUM(I9:J16)'
+       sheet['J4'] = account_Balance
        workbookName = str(self.workbook).replace("/", "")
 
        os.chdir(self.directory)

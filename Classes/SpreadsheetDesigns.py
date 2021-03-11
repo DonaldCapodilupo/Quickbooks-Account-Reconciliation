@@ -1,12 +1,21 @@
+def getTabName():
+    import datetime
+    current_time = datetime.datetime.now()
+    monthlyFolderTitle = current_time.strftime('%m%d%y')
+    return monthlyFolderTitle
+
+from SetupTool import getMonthlyFolderTitle
 
 class SpreadsheetDesigner:
-    def __init__(self, workbook, tabName, directory):
+    def __init__(self, workbook):
         self.workbook = workbook
-        self.tabName = tabName
-        self.directory = directory
+        self.tabName = getTabName()
+        self.directory = "Recons/"+getMonthlyFolderTitle()
 
 
     def moveAndCopyWorksheet(self):
+        import os
+        os.chdir(self.directory)
 
         from openpyxl import load_workbook
         from openpyxl.utils.exceptions import InvalidFileException

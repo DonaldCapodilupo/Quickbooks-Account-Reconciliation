@@ -5,11 +5,13 @@ import os
 import SetupTool
 SetupTool.directorySetup()
 
+ROOT = os.path.dirname(os.path.realpath(__file__))
 
 app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = 'Upload Folder'
 ALLOWED_EXTENSIONS = {'xlsx'}
+
 
 
 
@@ -49,12 +51,22 @@ def recon_Window():
 
 
             for account in accounts_In_GL.keys():
+                os.chdir(ROOT)
                 temp_name = account+".xlsx"
                 if temp_name in accounts_In_Directory:
                     data.append(Recon(account, accounts_In_GL[account], True))
+                    from Classes.SpreadsheetDesigns import SpreadsheetDesigner
+                    recon = SpreadsheetDesigner(temp_name)
+                    recon.moveAndCopyWorksheet()
+                    recon.insertNewAccountBalances(accounts_In_GL[account])
 
                 elif account not in accounts_In_Directory:
                     data.append(Recon(account, accounts_In_GL[account],False))
+                    from Classes.SpreadsheetCreator import SpreadsheetCreator
+                    recon = SpreadsheetCreator(temp_name)
+                    recon.doubleAccountReconcilliationformat(accounts_In_GL[account])
+
+
                 else:
                     data.append(Recon(account, accounts_In_GL[account], False))
 

@@ -1,10 +1,10 @@
 body{
-    background-color: lightskyblue;
+    background-color: tan;
 
 }
 
 .Main_Wrapper{
-    background-color: red;
+    background-color: lightskyblue;
     display:grid;
     grid-template-rows: auto auto auto;
     text-align: center;

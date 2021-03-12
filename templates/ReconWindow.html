@@ -38,8 +38,15 @@
                     <td>{{account_Name.account_Name}} Just Needs to be updated</td>
                 {% else %}
                     <td>{{account_Name.account_Name}} Needs to be Created
-                        <input type="submit" name=Single_Recon value="Assign Single Reconciliation">
-                        <input type="submit" name=Double_Recon value="Assign Double Reconciliation"></td>
+                        <form action="{{ url_for('create_Recon_Single') }}" method="POST">
+                            <input type="submit" name=Single_Recon value="Assign Single Reconciliation {{account_Name.account_Name}}">
+                        </form>
+
+                        <form action="{{ url_for('create_Recon_Double') }}" method="POST">
+                            <input type="submit" name=Double_Recon value="Assign Double Reconciliation {{account_Name.account_Name}}">
+                        </form>
+                    </td>
+
                 {% endif %}
 
             </tr>

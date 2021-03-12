@@ -117,6 +117,6 @@ class SpreadsheetCreator:
        sheet['J4'] = account_Balance
        workbookName = str(self.workbook).replace("/", "")
 
-       os.chdir(self.directory)
-       print(self.directory)
-       wb.save(self.directory + "/" + workbookName)
+
+
+       wb.save(workbookName)

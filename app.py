@@ -13,14 +13,9 @@ app.config['UPLOAD_FOLDER'] = 'Upload Folder'
 ALLOWED_EXTENSIONS = {'xlsx'}
 
 
-
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-
 
 @app.route('/', methods=["POST","GET"])
 def main_Menu():
@@ -30,10 +25,7 @@ def main_Menu():
     else:
         return render_template('main.html')
 
-
-
-
-
+#These lists need to persist between web pages.
 accounts_That_Need_Recons_Created = []
 data = []
 
@@ -61,13 +53,10 @@ def recon_Window():
                 elif account not in accounts_In_Directory:
                     data.append(Recon(account, accounts_In_GL[account],False))
                     accounts_That_Need_Recons_Created.append(Recon(account, accounts_In_GL[account],False))
-
                 else:
                     data.append(Recon(account, accounts_In_GL[account], False))
 
         return render_template('ReconWindow.html', data=data)
-
-
     elif request.method == "GET":
         return render_template("ReconWindow.html")
 
@@ -77,7 +66,6 @@ def create_Recon_Single():
     if request.method == 'POST':
         for account in accounts_That_Need_Recons_Created:
             os.chdir(ROOT)
-
             if request.form['Single_Recon'] == "Assign Single Reconciliation " + account.account_Name:
                 from Classes.SpreadsheetCreator import SpreadsheetCreator
                 from BackEndLogic import Recon
@@ -92,8 +80,6 @@ def create_Recon_Single():
             accounts_That_Need_Recons_Created.remove(account)
 
             return render_template('ReconWindow.html', data=data)
-
-
     else:
         return render_template('ReconWindow.html', data=data)
 
@@ -114,10 +100,10 @@ def create_Recon_Double():
                     if obj.account_Name == account.account_Name:
                         del data[index]
 
-
                 data.append(new_Recon_Obj)
             accounts_That_Need_Recons_Created.remove(account)
-        return render_template('ReconWindow.html', data=data)
+
+            return render_template('ReconWindow.html', data=data)
     else:
         return render_template('ReconWindow.html', data=data)
 

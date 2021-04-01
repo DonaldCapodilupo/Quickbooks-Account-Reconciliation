@@ -9,6 +9,7 @@ ROOT = os.path.dirname(os.path.realpath(__file__))
 
 app = Flask(__name__)
 
+#app.config['SERVER_NAME'] = 'www.SnapshotFinancials.com'
 app.config['UPLOAD_FOLDER'] = 'Upload Folder'
 ALLOWED_EXTENSIONS = {'xlsx'}
 
@@ -108,5 +109,16 @@ def create_Recon_Double():
         return render_template('ReconWindow.html', data=data)
 
 
+
+
+
 if __name__ == '__main__':
-    app.run()
+    import random, threading, webbrowser
+
+    port = 5000 + random.randint(0, 999)
+    url = "http://127.0.0.1:{0}".format(port)
+
+    threading.Timer(1.25, lambda: webbrowser.open(url)).start()
+
+    app.run(port=port, debug=False)
+

@@ -20,11 +20,34 @@ def allowed_file(filename):
 
 @app.route('/', methods=["POST","GET"])
 def main_Menu():
-    if request.method == "POST":
-        if request.form['btn_Confirm'] == 'Go To Recon Page':
-            return redirect(url_for('recon_Window'))
-    else:
-        return render_template('main.html')
+    if request.method == 'POST':
+
+        uploaded_file = request.files['excel_file']
+
+        if uploaded_file.filename != '':
+            filename = secure_filename(uploaded_file.filename)
+            uploaded_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            from BackEndLogic import accountsInGeneralLedger, accountsInDirectory, Recon
+
+            accounts_In_GL = accountsInGeneralLedger(filename)
+            accounts_In_Directory = accountsInDirectory()
+
+            # fills out data and accounts_That_Need_Recons_Created
+            for account in accounts_In_GL.keys():
+                os.chdir(ROOT)
+                temp_name = account + ".xlsx"
+                if temp_name in accounts_In_Directory:
+                    data.append(Recon(account, accounts_In_GL[account], True))
+                elif account not in accounts_In_Directory:
+                    data.append(Recon(account, accounts_In_GL[account], False))
+                    accounts_That_Need_Recons_Created.append(Recon(account, accounts_In_GL[account], False))
+                else:
+                    data.append(Recon(account, accounts_In_GL[account], False))
+
+        return render_template('main.html', data=data)
+    elif request.method == "GET":
+        return render_template("main.html", data=False)
 
 #These lists need to persist between web pages.
 accounts_That_Need_Recons_Created = []
@@ -57,9 +80,9 @@ def recon_Window():
                 else:
                     data.append(Recon(account, accounts_In_GL[account], False))
 
-        return render_template('ReconWindow.html', data=data)
+        return render_template('main.html', data=data)
     elif request.method == "GET":
-        return render_template("ReconWindow.html")
+        return render_template("main.html")
 
 
 @app.route('/SingleRecon', methods=["POST","GET"])
@@ -80,9 +103,9 @@ def create_Recon_Single():
                 data.append(new_Recon_Obj)
             accounts_That_Need_Recons_Created.remove(account)
 
-            return render_template('ReconWindow.html', data=data)
+            return render_template('main.html', data=data)
     else:
-        return render_template('ReconWindow.html', data=data)
+        return render_template('main.html', data=data)
 
 
 @app.route('/DoubleRecon', methods=["POST","GET"])
@@ -104,9 +127,9 @@ def create_Recon_Double():
                 data.append(new_Recon_Obj)
             accounts_That_Need_Recons_Created.remove(account)
 
-            return render_template('ReconWindow.html', data=data)
+            return render_template('main.html', data=data)
     else:
-        return render_template('ReconWindow.html', data=data)
+        return render_template('main.html', data=data)
 
 
 

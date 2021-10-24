@@ -30,7 +30,7 @@
 
                 <form action="{{ url_for('recon_Window') }}" enctype=multipart/form-data method="POST">
                     <input type="file" name="excel_file" accept=".xlsx">
-                    <input type="submit" name="TheButton" value="Begin Reconciliation" class="btn btn-success">
+                    <input type="submit" name="TheButton" value="Begin Reconciliation" class="btn btn-success" id="Begin Reconciliation Button">
                 </form>
             </div>
         </div>
@@ -64,19 +64,17 @@
                             <td>{{account_Name.account_Name[0:5]}} Needs to be Created</td>
                             <td align="center">
                                 <form action="{{ url_for('create_Recon_Single') }}" method="POST">
-                                    <input type="submit" name=Single_Recon
-                                           value="Assign Single Reconciliation {{account_Name.account_Name[0:5]}}"
-                                           class="btn btn-primary"
-                                           >
+                                    <input type="submit" class="btn btn-success" name=Double_Recon id="Single Recon Button" value="Assign Single Reconciliation {{account_Name.account_Name[0:5]}}">
                                 </form>
                             </td>
                             <td align="center">
 
                                 <form action="{{ url_for('create_Recon_Double') }}" method="POST">
-                                    <input type="submit" name=Double_Recon
-                                           value="Assign Double Reconciliation {{account_Name.account_Name[0:5]}}"
-                                           class="btn btn-secondary"
-                                           >
+                                    <input type="submit" class="btn btn-success" name=Double_Recon id="Double Recon Button" value="Assign Double Reconciliation {{account_Name.account_Name[0:5]}}">
+                                           <!--"
+
+
+                                           -->
                                 </form>
                             </td>
 
@@ -92,5 +90,48 @@
     {% endif %}
 
 </div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+        $(function() {
+          $('#Double Recon Button').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/DoubleRecon',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+        $(function() {
+          $('#Single Recon Button').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/SingleRecon',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+        $(function() {
+          $('#Begin Reconciliation Button').on('click', function(e) {
+            e.preventDefault()
+            $.getJSON('/ReconWindow',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+</script>
+
 </body>
 </html>

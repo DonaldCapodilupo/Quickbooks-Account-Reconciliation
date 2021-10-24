@@ -90,17 +90,15 @@ def create_Recon_Single():
     if request.method == 'POST':
         for account in accounts_That_Need_Recons_Created:
             os.chdir(ROOT)
-            if request.form['Single_Recon'] == "Assign Single Reconciliation " + account.account_Name:
-                from Classes.SpreadsheetCreator import SpreadsheetCreator
-                from BackEndLogic import Recon
-                recon = SpreadsheetCreator(account.account_Name + ".xlsx")
-                recon.singleAccountReconcilliationformat(account.account_Balance)
-                new_Recon_Obj = Recon(account.account_Name, account.account_Balance, True)
-                for index, obj in enumerate(data):
-                    if obj.account_Name == account.account_Name:
-                        del data[index]
-
-                data.append(new_Recon_Obj)
+            from Classes.SpreadsheetCreator import SpreadsheetCreator
+            from BackEndLogic import Recon
+            recon = SpreadsheetCreator(account.account_Name + ".xlsx")
+            recon.singleAccountReconcilliationformat(account.account_Balance)
+            new_Recon_Obj = Recon(account.account_Name, account.account_Balance, True)
+            for index, obj in enumerate(data):
+                if obj.account_Name == account.account_Name:
+                    del data[index]
+            data.append(new_Recon_Obj)
             accounts_That_Need_Recons_Created.remove(account)
 
             return render_template('main.html', data=data)
@@ -114,17 +112,16 @@ def create_Recon_Double():
         for account in accounts_That_Need_Recons_Created:
             os.chdir(ROOT)
 
-            if request.form['Double_Recon'] == "Assign Double Reconciliation " + account.account_Name:
-                from Classes.SpreadsheetCreator import SpreadsheetCreator
-                from BackEndLogic import Recon
-                recon = SpreadsheetCreator(account.account_Name + ".xlsx")
-                recon.doubleAccountReconcilliationformat(account.account_Balance)
-                new_Recon_Obj = Recon(account.account_Name,account.account_Balance,True)
-                for index, obj in enumerate(data):
-                    if obj.account_Name == account.account_Name:
-                        del data[index]
-
-                data.append(new_Recon_Obj)
+            #if request.form['Double_Recon'] == "Assign Double Reconciliation " + account.account_Name:
+            from Classes.SpreadsheetCreator import SpreadsheetCreator
+            from BackEndLogic import Recon
+            recon = SpreadsheetCreator(account.account_Name + ".xlsx")
+            recon.doubleAccountReconcilliationformat(account.account_Balance)
+            new_Recon_Obj = Recon(account.account_Name,account.account_Balance,True)
+            for index, obj in enumerate(data):
+                if obj.account_Name == account.account_Name:
+                    del data[index]
+            data.append(new_Recon_Obj)
             accounts_That_Need_Recons_Created.remove(account)
 
             return render_template('main.html', data=data)

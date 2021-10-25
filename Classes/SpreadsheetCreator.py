@@ -14,9 +14,7 @@ class SpreadsheetCreator:
         self.tabName = getTabName()
         self.directory = "Recons/"+getMonthlyFolderTitle()
 
-
-
-    def doubleAccountReconcilliationformat(self, account_Balance):
+    def doubleAccountReconciliationFormat(self, account_Balance):
         from openpyxl import Workbook
         from openpyxl.styles import Font, Alignment
         import datetime
@@ -62,14 +60,15 @@ class SpreadsheetCreator:
         sheet['J4'] = account_Balance
         workbookName = str(self.workbook).replace("/", "")
         workbookName.strip("/")
-        #os.chdir(self.directory)
-        #print(self.directory)
-        wb.save(self.workbook)
 
-    def singleAccountReconcilliationformat(self,account_Balance):
+        wb.save(self.workbook)
+        os.chdir("../..")
+
+    def singleAccountReconciliationFormat(self, account_Balance):
        from openpyxl import Workbook
        from openpyxl.styles import Font, Alignment
        import datetime
+       print(os.getcwd())
        os.chdir(self.directory)
        wb = Workbook()
        wb.create_sheet(self.tabName)
@@ -117,6 +116,5 @@ class SpreadsheetCreator:
        sheet['J4'] = account_Balance
        workbookName = str(self.workbook).replace("/", "")
 
-
-
        wb.save(workbookName)
+       os.chdir("../..")

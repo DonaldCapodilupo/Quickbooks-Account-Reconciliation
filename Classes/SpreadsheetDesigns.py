@@ -29,6 +29,7 @@ class SpreadsheetDesigner:
             wb.save(self.workbook)
         except InvalidFileException:
             print("Not an excel file extension - "+ self.workbook)
+        os.chdir("..")
 
 
 

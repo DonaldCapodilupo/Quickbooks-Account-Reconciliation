@@ -28,9 +28,10 @@
         <div class="col-10" align="center">
             <div class="p-3 mb-2 bg-dark text-white">
 
-                <form action="{{ url_for('recon_Window') }}" enctype=multipart/form-data method="POST">
+                <form method="POST" id='file-import' enctype=multipart/form-data>
                     <input type="file" name="excel_file" accept=".xlsx">
-                    <input type="submit" name="TheButton" value="Begin Reconciliation" class="btn btn-success" id="Begin Reconciliation Button">
+                    <input type="submit" name="TheButton" value="Begin Reconciliation" class="btn btn-success"
+                           id="Begin Reconciliation Button">
                 </form>
             </div>
         </div>
@@ -39,98 +40,100 @@
     </div>
     {% if data:%}
 
-        <div class="row" align="center">
-            <div class="col-1"></div>
-            <div class="col-10">
-                <div class="p-3 mb-2 bg-dark text-white">
+    <div class="row" align="center">
+        <div class="col-1"></div>
+        <div class="col-10">
+            <div class="p-3 mb-2 bg-dark text-white">
 
-                    <table class="table table-bordered table-dark">
-                        <tr align="center">
-                            <th>Account Name</th>
-                            <th>Account Balance</th>
-                            <th>Recon Status</th>
-
-
-                        </tr>
-                        {% for account_Name in data %}
-                        <tr align="center">
-                            <td>{{account_Name.account_Name}}</td>
-                            <td>${{account_Name.account_Balance}}</td>
+                <table class="table table-bordered table-dark">
+                    <tr align="center">
+                        <th>Account Name</th>
+                        <th>Account Balance</th>
+                        <th>Recon Status</th>
 
 
-                            {% if account_Name.account_Status_Exists: %}
-                            <td>{{account_Name.account_Name[0:5]}} Just Needs to be updated</td>
-                            {% else %}
-                            <td>{{account_Name.account_Name[0:5]}} Needs to be Created</td>
-                            <td align="center">
-                                <form action="{{ url_for('create_Recon_Single') }}" method="POST">
-                                    <input type="submit" class="btn btn-success" name=Double_Recon id="Single Recon Button" value="Assign Single Reconciliation {{account_Name.account_Name[0:5]}}">
-                                </form>
-                            </td>
-                            <td align="center">
-
-                                <form action="{{ url_for('create_Recon_Double') }}" method="POST">
-                                    <input type="submit" class="btn btn-success" name=Double_Recon id="Double Recon Button" value="Assign Double Reconciliation {{account_Name.account_Name[0:5]}}">
-                                           <!--"
+                    </tr>
+                    {% for account_Name in data %}
+                    <tr align="center">
+                        <td>{{account_Name.account_Name}}</td>
+                        <td>{{account_Name.account_Balance}}</td>
 
 
-                                           -->
-                                </form>
-                            </td>
+                        {% if account_Name.account_Status_Exists: %}
+                        <td>{{account_Name.account_Name[0:6]}} Just Needs to be updated</td>
+                        {% else %}
+                        <td>{{account_Name.account_Name[0:6]}} Needs to be Created</td>
+                        <td align="center">
+                            <form method="POST">
+                                <input type="submit" class="btn btn-success" name=Single_Recon id="Single Recon Button"
+                                       value="Assign Single Reconciliation {{account_Name.account_Name[0:6]}}">
+                            </form>
+                        </td>
+                        <td align="center">
 
-                            {% endif %}
+                            <form method="POST">
+                                <input type="submit" class="btn btn-success" name=Double_Recon id="Double Recon Button"
+                                       value="Assign Double Reconciliation {{account_Name.account_Name[0:6]}}">
+                                <!--"
 
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
+
+                                -->
+                            </form>
+                        </td>
+
+                        {% endif %}
+
+                    </tr>
+                    {% endfor %}
+                </table>
             </div>
-            <div class="col-1"></div>
         </div>
+        <div class="col-1"></div>
+    </div>
     {% endif %}
 
 </div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type=text/javascript>
-        $(function() {
-          $('#Double Recon Button').on('click', function(e) {
+    $(function () {
+        $('#Double Recon Button').on('click', function (e) {
             e.preventDefault()
             $.getJSON('/DoubleRecon',
-                function(data) {
-              //do nothing
-            });
+                function (data) {
+                    //do nothing
+                });
             return false;
-          });
         });
+    });
 </script>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type=text/javascript>
-        $(function() {
-          $('#Single Recon Button').on('click', function(e) {
+    $(function () {
+        $('#Single Recon Button').on('click', function (e) {
             e.preventDefault()
             $.getJSON('/SingleRecon',
-                function(data) {
-              //do nothing
-            });
+                function (data) {
+                    //do nothing
+                });
             return false;
-          });
         });
+    });
 </script>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type=text/javascript>
-        $(function() {
-          $('#Begin Reconciliation Button').on('click', function(e) {
+    $(function () {
+        $('#Begin Reconciliation Button').on('click', function (e) {
             e.preventDefault()
-            $.getJSON('/ReconWindow',
-                function(data) {
-              //do nothing
-            });
+            $.getJSON('/',
+                function (data) {
+                    //do nothing
+                });
             return false;
-          });
         });
+    });
 </script>
 
 </body>
